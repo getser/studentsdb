@@ -27,3 +27,14 @@ padding-top: 10px;
 	line-height: 30px;
 	color: #555555;
 }
+
+h2.left{
+	display: inline-block;
+	float: left;
+}
+
+.near{
+	display: inline-block;
+	margin: 15px 0px 0px 50px;
+	float: left;
+}
