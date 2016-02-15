@@ -1,0 +1,52 @@
+/* Global Styles */
+h1, h2, h3, h4, h5, h6 {
+font-weight: bold;
+}
+
+.alert {
+    margin-top: 10px;
+}
+
+#footer {
+/* задаємо верхню межу елемента: ширина лінії, тип лінії, колірлінії */
+border-top: 1px solid #dddddd;
+/* задаємо внутрішню відстань елемента до верхнього краю */
+padding-top: 10px;
+}
+
+#group-selector {
+    margin-top: 30px;
+}
+
+#group-selector select {
+    margin: 0;
+    width: 85;
+    background-color: #ffffff;
+    border: 1px solid #cccccc;
+    height: 30px;
+    line-height: 30px;
+    color: #555555;
+}
+
+h2.left{
+    display: inline-block;
+    float: left;
+}
+
+.near{
+    display: inline-block;
+    margin: 15px 0px 0px 50px;
+    float: left;
+}
+
+.center{
+    display: block;
+/*    border: solid black;
+    width: 100%*/
+    margin: 0 auto;
+    text-align: center;
+}
+
+.controls {
+    display: inline;
+}
