@@ -5,6 +5,19 @@
 
 {% block title %}Групи{% endblock title %}
 
+{% block logo %}<h1>Сервіс Обліку Студентів</h1>{% endblock logo %}
+
+{% block groups_selector %}
+    <div class="col-xs-4" id='group-selector'>
+        <strong>Група:</strong>
+        <select>
+            <option value=''>Усі студенти</option>
+            <option value=''>МтМ - 21, Іванов Іван (№ 7657)</option>
+            <option value=''>МтМ - 22, Гетьманчук Сергій (№ 2123)</option>
+        </select>
+    </div>
+{% endblock groups_selector %}
+
 {% block content %}
     <a class='btn btn-primary near' href={% url 'groups_add' %}>Додати Групу</a>
     <table class='table table-hover table-striped'>
@@ -20,8 +33,8 @@
             {% for group in groups %}
             <tr>
                 <td>{{ forloop.counter }}</td>
-                <td><a title='Редагувати' href={% url 'groups_edit' group.id %}>{{group.title}}</a></td>
-                <td>{{group.monitor}}</td>
+                <td><a title='Редагувати' href={% url 'groups_edit' group.id %}>{{group.name}}</a></td>
+                <td><a title='Редагувати старосту' href={% url 'students_edit' group.leader.id %}>{{group.leader.name}}<a/></td>
                 <td>
                     <div class="dropdown">
                         <button class='btn btn-defoult dropdown-toggle'
@@ -32,9 +45,6 @@
                         <ul class='dropdown-menu' role='menu'>
                             <li role='presentation'>
                             <a role='menuitem' tabindex='-1' href={% url 'groups_edit' group.id %}>Редагувати</a>
-                            </li>
-                            <li role='presentation'>
-                            <a role='menuitem' tabindex='-1' href={% url 'journal'%}>Відвідування</a>
                             </li>
                             <li role='presentation'>
                             <a role='menuitem' tabindex='-1' href={% url 'groups_delete' group.id %}>Видалити</a>
@@ -48,13 +58,23 @@
         </tbody>
     </table>
 
-    <nav>
+
+{% include 'students/nav_pagin.html' %}
+<!--     <nav>
         <ul class="pagination">
             <li><a href="#">Назад</a></li>
             <li><a href="#">1</a></li>
             <li class="active"><a href="#">2</a></li>
             <li><a href="#">Далі</a></li>
         </ul>
-    </nav>
+    </nav> -->
 
 {% endblock content %}
+
+{% block footer %}
+    <div class="row" id="footer">
+        <div class="col-xs-12">
+            <p>&copy; 2016 Сервіс Обліку Студентів. Групи.</p>
+        </div>
+    </div>
+{% endblock footer %}
