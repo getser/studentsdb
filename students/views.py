@@ -13,17 +13,17 @@ def students_list(request):
          'last_name': u'Гетьманчук',
          'ticket': 2123,
          'image': 'img/me1.jpeg'},
-        {'id':1,
+        {'id':2,
          'first_name': u'Іван',
          'last_name': u'Іванов',
          'ticket': 7657,
          'image': 'img/podoba3.jpg'},
-        {'id':1,
+        {'id':3,
          'first_name': u'Василь',
          'last_name': u'Петров',
          'ticket': 9823,
          'image': 'img/piv.png'},
-        {'id':1,
+        {'id':4,
          'first_name': u'Сергій',
          'last_name': u'Дрозд',
          'ticket': 3405,
@@ -51,7 +51,23 @@ def students_delete(request, sid):
 # Views for groups
 
 def groups_list(request):
-    return HttpResponse('<h1>Groups Listing</h1>')
+    groups = (
+        {'id':1,
+         'monitor': u'Гетьманчук',
+         'title': 'Мтм-223',},
+        {'id':2,
+         'monitor': u'Іванов',
+         'title': 'Мтм-221',},
+        {'id':3,
+         'monitor': u'Петров',
+         'title': 'Мтм-232',},
+        {'id':4,
+         'monitor': u'Дрозд',
+         'title': 'Мтм-234',},
+        )
+
+    return render(request, 'students/groups_list.html', {'groups':groups})
+    # return HttpResponse('<h1>Groups Listing</h1>')
 
 
 def groups_add(request):
