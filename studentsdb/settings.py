@@ -30,6 +30,12 @@ DEBUG = True
 ALLOWED_HOSTS = []
 
 
+#Application data files storage configuration (photo, .mp3, etc.)
+
+MEDIA_URL = '/media/'
+MEDIA_ROOT = os.path.join(BASE_DIR, '..', 'media')
+
+
 # Application definition
 
 INSTALLED_APPS = [
@@ -108,7 +114,7 @@ AUTH_PASSWORD_VALIDATORS = [
 # Internationalization
 # https://docs.djangoproject.com/en/1.9/topics/i18n/
 
-LANGUAGE_CODE = 'en-us'
+LANGUAGE_CODE = 'uk'
 
 TIME_ZONE = 'UTC'
 
