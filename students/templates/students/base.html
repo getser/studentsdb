@@ -46,7 +46,7 @@
                     <ul class='nav nav-tabs' role='tablist'>
                         <li role='presentation' {% if request.path == '/' %} class='active' {% endif %}><a href={% url 'home' %}?order_by=last_name>Студенти</a></li>
                         <li role='presentation' {% url 'journal' as journal_url %}{% if journal_url in request.path %} class='active' {% endif %}><a href={% url 'journal' %}>Відвідування</a></li>
-                        <li role='presentation' {% url 'groups' as group_url %} {% if group_url in request.path %} class='active' {% endif %}><a href={% url 'groups' %}>Групи</a></li>
+                        <li role='presentation' {% url 'groups' as group_url %} {% if group_url in request.path %} class='active' {% endif %}><a href={% url 'groups' %}?order_by=title>Групи</a></li>
                     </ul>
                 </div>
             </div>
