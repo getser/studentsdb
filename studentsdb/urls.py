@@ -16,9 +16,7 @@ Including another URLconf
 from django.conf.urls import url
 from django.contrib import admin
 
-from students.views import students
-from students.views import groups
-from students.views import journal
+from students.views import students, groups, journal
 
 from .settings import MEDIA_ROOT, DEBUG
 # from django.contrib.staticfiles import views

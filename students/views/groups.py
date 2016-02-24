@@ -3,7 +3,8 @@ from django.shortcuts import render
 from django.http import HttpResponse
 from django.template import RequestContext, loader
 from django.core.paginator import Paginator, EmptyPage, PageNotAnInteger
-from ..models import Group
+# from ..models import Group
+from ..models.groups import Group
 
 
 # Views for groups
