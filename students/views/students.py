@@ -36,7 +36,7 @@ def students_list(request):
             students = students.reverse()
 
     # paging students withuot Paginator
-    items_per_page = 3       # !! can't be less than 1 !!
+    items_per_page = 5       # !! can't be less than 1 !!
     num_items = len(students)
     num_pages = num_items / items_per_page
 
@@ -174,7 +174,7 @@ def students_add(request):
                     )
                 student.save()
                 # return to students list
-                return HttpResponseRedirect(reverse('home'))
+                return HttpResponseRedirect(u'%s?status_message=Студента %s %s успішно додано!' % (reverse('home'), first_name, last_name))
             else:
                 return render(request, 'students/students_add.html',
                     {'groups': Group.objects.all().order_by('title'),
@@ -182,7 +182,7 @@ def students_add(request):
         elif request.POST.get('cancel_button') is not None:     
         # if cancel button pressed:
             # return to students list
-            return HttpResponseRedirect(reverse('home'))
+            return HttpResponseRedirect(u'%s?status_message=Додавання студента скасовано!' % reverse('home'))
     else:        
     # if form method is not POST:        
         # return form in start state
