@@ -11,10 +11,11 @@ https://docs.djangoproject.com/en/1.9/ref/settings/
 """
 
 import os
-
 from django.conf import global_settings
-
 from . import db
+
+
+MAX_UPLOAD_SIZE = 1048576
 
 
 # Build paths inside the project like this: os.path.join(BASE_DIR, ...)

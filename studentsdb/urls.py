@@ -16,10 +16,13 @@ Including another URLconf
 from django.conf.urls import url
 from django.contrib import admin
 
-from students.views import students, groups, journal
+from students.views import students, groups, journal, exams
 
 from .settings import MEDIA_ROOT, DEBUG
 # from django.contrib.staticfiles import views
+from django.conf import settings
+from django.conf.urls.static import static
+
 
 
 urlpatterns = [
@@ -38,7 +41,14 @@ urlpatterns = [
     url(r'^groups/(?P<gid>\d+)/delete/$', groups.groups_delete, name='groups_delete'),
 
 
+    # exams urls
+    url(r'^exams/$', exams.exams_list, name='exams'),
+    url(r'^exams/add/$', exams.exams_add, name='exams_add'),
+    url(r'^exams/(?P<eid>\d+)/edit/$', exams.exams_edit, name='exams_edit'),
+    url(r'^exams/(?P<eid>\d+)/delete/$', exams.exams_delete, name='exams_delete'),
 
+
+    # journal urls
     url(r'^journal/$', journal.journal, name='journal'),
     url(r'^journal/(?P<jid>\d+)/$', journal.journal_id, name='journal_id'),
 
@@ -49,9 +59,7 @@ urlpatterns = [
 
 if DEBUG:
     #serve files from media folder
-    # urlpatterns += [url(r'^media/(?P<path>.*)$', views.serve,
-    #  {'document_root': MEDIA_ROOT,}
-    #  ),]
-        urlpatterns += [url(r'^media/(?P<path>.*)$', 'django.views.static.serve',
-     {'document_root': MEDIA_ROOT}
-     ),]
+     #    urlpatterns += [url(r'^media/(?P<path>.*)$', 'django.views.static.serve',
+     # {'document_root': MEDIA_ROOT}
+     # ),]
+        urlpatterns += static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)

@@ -1,0 +1,65 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8"/>
+    <title></title>
+</head>
+<body>
+    <form action="/submit_form.html" method="post"
+          enctype="multipart/form-data" name="myform">
+        <input type="hidden" value="27" name="student_id"/>
+        <div>
+            <label for="first_name">Your name</label>
+            <input type="text" value="" name="first_name" id="first_name"/>
+        </div>
+        <div>
+            <label for="graduated">Are You graduated?</label>
+            <input type="checkbox" checked="1" value="1" name="graduated" id="graduated"/>
+        </div>
+        <div>
+            <label for="gender">Your gender</label>
+            <input type="radio" value="male" name="gender" id="gender"/>
+            <input type="radio" value="female" name="gender" id="gender"/>
+        </div>
+        <div>
+            <label for="age">Your age</label>
+            <select name="age" id="age">
+            <option value="">Select Your age</option>
+            <option value="10">Over 10</option>
+            <option value="20">Over 20</option> 
+            </select>
+        </div>
+        <div>
+            <label for="notes">Additional notes</label>
+            <textarea type="text" value="" name="notes" id="notes" rows="10" cols="20"></textarea>
+        </div>
+
+        <div>
+            <label for="choose_date">choose_date</label>
+            <input type="date" value="" name="choose_date" id="choose_date"/>
+        </div>
+
+        <div>
+            <label for="choose_color">choose_color</label>
+            <input type="color" value="" name="choose_color" id="choose_color"/>
+        </div>
+
+        <div>
+            <label for="choose_pass">choose_pass</label>
+            <input type="password" value="" name="choose_pass" id="choose_pass"/>
+        </div>
+
+        <div>
+            <label for="choose_file">choose_file</label>
+            <input type="file" value="" name="choose_file" id="choose_file"/>
+        </div>
+
+        <div>
+            <label for="choose_number">choose_number</label>
+            <input type="range" value="" name="choose_number" id="choose_number"/>
+        </div>
+
+        <input type="submit" value="Save" name="save_button"/><button type="reset" >Cancel</button>
+    </form>
+</body>
+</html>
