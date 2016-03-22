@@ -8,7 +8,7 @@ font-weight: bold;
 }
 
 #footer {
-/* задаємо верхню межу елемента: ширина лінії, тип лінії, колірлінії */
+/* задаємо верхню межу елемента: ширина лінії, тип лінії, колір лінії */
 border-top: 1px solid #dddddd;
 /* задаємо внутрішню відстань елемента до верхнього краю */
 padding-top: 10px;
@@ -49,4 +49,8 @@ h2.left{
 
 .controls {
     display: inline;
+}
+
+textarea, select, input {
+    max-width: 300px;
 }
