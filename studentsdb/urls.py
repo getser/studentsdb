@@ -13,15 +13,20 @@ Including another URLconf
     1. Import the include() function: from django.conf.urls import url, include
     2. Add a URL to urlpatterns:  url(r'^blog/', include('blog.urls'))
 """
-from django.conf.urls import url
+
+from django.conf.urls import url, include
+# from django.conf.urls import url
 from django.contrib import admin
 
-from students.views import students, groups, journal, exams
+from students.views import students, groups, journal, exams, contact_admin
 
 from .settings import MEDIA_ROOT, DEBUG
 # from django.contrib.staticfiles import views
 from django.conf import settings
 from django.conf.urls.static import static
+
+from django.conf.urls import patterns, url
+from students.views.students import StudentList, StudentUpdateView, StudentDeleteView
 
 
 
@@ -30,8 +35,12 @@ urlpatterns = [
     # students urls
     url(r'^$', students.students_list, name='home'),
     url(r'^students/add/$', students.students_add, name='students_add'),
-    url(r'^students/(?P<sid>\d+)/edit/$', students.students_edit, name='students_edit'),
-    url(r'^students/(?P<sid>\d+)/delete/$', students.students_delete, name='students_delete'),
+    # url(r'^students/(?P<sid>\d+)/edit/$', students.students_edit, name='students_edit'),
+    url(r'^students/(?P<pk>\d+)/edit/$', StudentUpdateView.as_view(), name='students_edit'),
+    # url(r'^students/(?P<sid>\d+)/delete/$', students.students_delete, name='students_delete'),
+    url(r'^students/(?P<pk>\d+)/delete/$', StudentDeleteView.as_view(), name='students_delete'),
+    url(r'^student_list/$', StudentList.as_view()),
+
 
 
     # groups urls
@@ -54,6 +63,11 @@ urlpatterns = [
 
 
     url(r'^admin/', admin.site.urls),
+    url(r'^contact-admin/$', contact_admin.contact_admin, name='contact_admin'),
+    url(r'^contact/', include('contact_form.urls')),
+    # url(r'^contact/$', include('contact_form.urls'), name='contact'),
+
+
     
 ]
 

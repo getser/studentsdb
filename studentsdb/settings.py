@@ -34,6 +34,18 @@ DEBUG = True
 ALLOWED_HOSTS = []
 
 
+
+# email settings
+# please, set here you smtp server details and your admin email
+ADMIN_EMAIL = 'getser@mail.ru'
+EMAIL_HOST = 'smtp.gmail.com'
+EMAIL_PORT = '465'
+EMAIL_HOST_USER = 'getser****@gmail.com'
+EMAIL_HOST_PASSWORD = '*******'
+EMAIL_USE_TLS = False
+EMAIL_USE_SSL = True
+
+
 #Application data files storage configuration (photo, .mp3, etc.)
 
 MEDIA_URL = '/media/'
@@ -49,8 +61,13 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
+    'crispy_forms',
+    'django.contrib.sites',
     'students',
 ]
+
+CRISPY_TEMPLATE_PACK = 'bootstrap3'
+
 
 MIDDLEWARE_CLASSES = [
     'django.middleware.security.SecurityMiddleware',
