@@ -1,10 +1,13 @@
 # -*- coding: utf-8 -*-
 from django.shortcuts import render
-from django.http import HttpResponse
+from django.http import HttpResponse, HttpResponseRedirect
 from django.template import RequestContext, loader
 from django.core.paginator import Paginator, EmptyPage, PageNotAnInteger
 # from ..models import Group
 from ..models.groups import Group
+from ..models.students import Student
+
+from django.core.urlresolvers import reverse
 
 
 # Views for groups
@@ -22,7 +25,7 @@ def groups_list(request):
             groups = groups.reverse()
 
 
-    paginator = Paginator(groups, 3)
+    paginator = Paginator(groups, 4)
     page = request.GET.get('page', '')
     try:
         groups = paginator.page(page)
@@ -50,7 +53,39 @@ def groups_list(request):
 
 
 def groups_add(request):
-    return HttpResponse('<h1>Group add form</h1>')
+    if request.method == 'POST':
+        if request.POST.get('add_button') is not None:
+            errors = {}
+            data = {'notes':request.POST.get('notes'),}
+
+            title = request.POST.get('title')
+            if not title:
+                errors['title'] = u"Title is required!"
+            else:
+                data['title'] = title
+
+            leader = request.POST.get('leader')
+            if leader:
+                students = Student.objects.filter(pk=leader)
+                if len(students) != 1:
+                    errors['leader'] = u'Choose right student'
+                else:
+                    data['leader'] = students[0]
+            if not errors:
+                group = Group(**data)
+                group.save()
+                return HttpResponseRedirect(u'%s?status_message=Group %s succesfully added' % (reverse('groups'), title))
+            else:
+                return render(request, 'students/groups_add.html',
+                    {'students': Student.objects.all().order_by('last_name'),
+                    'errors': errors})
+
+        elif request.POST.get('cancel_button') is not None:
+            return HttpResponseRedirect(u'%s?status_message=Додавання групи скасовано!' % reverse('groups'))
+    else:
+        return render(request, 'students/groups_add.html',
+            {'students': Student.objects.all().order_by('last_name')})
+    # return HttpResponse('<h1>Group add form</h1>')
 
 
 def groups_edit(request, gid):
