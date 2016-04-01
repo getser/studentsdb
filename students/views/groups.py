@@ -9,6 +9,10 @@ from ..models.students import Student
 
 from django.core.urlresolvers import reverse
 
+from django.views.generic import DeleteView
+from django.db.models.deletion import ProtectedError
+
+
 
 # Views for groups
 
@@ -34,6 +38,7 @@ def groups_list(request):
     except EmptyPage:
         groups = paginator.page(paginator.num_pages)
 
+    # hardcoded trial data set 
     # groups = (
     #     {'id':1,
     #      'leader': {'id': 1, 'second_name': u'Гетьманчук'},
@@ -60,7 +65,7 @@ def groups_add(request):
 
             title = request.POST.get('title')
             if not title:
-                errors['title'] = u"Title is required!"
+                errors['title'] = u"Назва групи обов'язкова!"
             else:
                 data['title'] = title
 
@@ -68,13 +73,13 @@ def groups_add(request):
             if leader:
                 students = Student.objects.filter(pk=leader)
                 if len(students) != 1:
-                    errors['leader'] = u'Choose right student'
+                    errors['leader'] = u'Виберіть правильного студента.'
                 else:
                     data['leader'] = students[0]
             if not errors:
                 group = Group(**data)
                 group.save()
-                return HttpResponseRedirect(u'%s?status_message=Group %s succesfully added' % (reverse('groups'), title))
+                return HttpResponseRedirect(u'%s?status_message=Група %s успішно додана.' % (reverse('groups'), title))
             else:
                 return render(request, 'students/groups_add.html',
                     {'students': Student.objects.all().order_by('last_name'),
@@ -92,5 +97,36 @@ def groups_edit(request, gid):
     return HttpResponse('<h1>Group %s edit form</h1>' %gid)
 
 
-def groups_delete(request, gid):
-    return HttpResponse('<h1>Group %s delete form</h1>' %gid)
+# def groups_delete(request, gid):
+#     return HttpResponse('<h1>Group %s delete form</h1>' %gid)
+
+class GroupDeleteView(DeleteView):
+    """Class view for group delete"""
+
+    model = Group
+    template_name = 'students/groups_confirm_delete.html' # reassigning template name !!!
+
+    def get_success_url(self):
+        return u'%s?status_message=Gruop was succesfully deleted!' % reverse('groups')
+
+    def delete(self, request, *args, **kwargs):
+        """
+        Calls the delete() method on the fetched object and then
+        redirects to the success URL.
+        """
+
+        self.object = self.get_object()
+        success_url = self.get_success_url()
+
+        try:
+            self.object.delete()
+        except ProtectedError:
+            return HttpResponseRedirect(u'%s?status_message=Group %s deletion is impossible! It contains students. Please take away all students from this group.' % (reverse('groups'), str(kwargs['pk'])))
+
+        return HttpResponseRedirect(success_url)
+
+    # def post(self, request, *args, **kwargs):
+    #     if request.POST.get('cancel_button'):
+    #         return HttpResponseRedirect(u'%s?status_message=**да**ння групи скасовано!' % reverse('groups'))
+    #     elif request.POST.get('delete_button'):
+    #         return self.get_success_url()

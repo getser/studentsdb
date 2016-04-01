@@ -1,0 +1,38 @@
+{% extends 'students/base.html' %}
+
+{% load static from staticfiles %}
+
+{% block meta_title %}Видалити groups{% endblock meta_title %}
+
+{% block title %}Видалити groups{% endblock title %}
+               
+
+{% block content %}
+
+
+    <div style="display: block;">
+        <br/><br/><br/><br/>
+
+        <form action="{% url "groups_delete" object.id %}" method="post" >
+            {% csrf_token %}
+            <p>Ви дійсно хочете видалити group "{{ object }}"?</p>
+
+            <input type="submit" value="Так" name="delete_button" class="btn btn-danger" />
+            </form>
+            <br/>
+            <a href={% url 'groups' %}?status_message=Cкасовано! class="btn btn-success" >No&nbsp;</a>
+            <br/><br/>
+
+    </div>
+           
+
+
+{% endblock content %}
+
+{% block footer %}
+    <div class="row" id="footer">
+        <div class="col-xs-12">
+            <p>&copy; 2016 Сервіс Обліку Студентів. Видалення groups.</p>
+        </div>
+    </div>
+{% endblock footer %}

@@ -18,9 +18,12 @@
             <p>Ви дійсно хочете видалити студента "{{ object }}"?</p>
 
             <input type="submit" value="Так" name="delete_button" class="btn btn-danger" />
-            <button type="submit" name="cancel_button" value="Скасувати" class="btn btn-linc">Скасувати</button>
-            <br/><br/>
+<!--             <button type="submit" name="cancel_button" value="Скасувати" class="btn btn-link">Скасувати</button>
+            <br/><br/> -->
             </form>
+            <br/>
+            <a href={% url 'home' %}?status_message="Відмінено!" class="btn btn-success" >No&nbsp;</a>
+            <br/><br/>
 
     </div>
            
