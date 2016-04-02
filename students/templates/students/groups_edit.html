@@ -1,0 +1,51 @@
+{% extends 'students/base.html' %}
+
+{% load static from staticfiles %}
+
+{% load crispy_forms_tags %}
+
+{% block meta_title %}Редагувати групу{% endblock meta_title %}
+
+{% block title %}Редагувати групу{% endblock title %}
+
+{% block logo %}<h1>Сервіс Обліку Студентів</h1>{% endblock logo %}
+               
+
+{% block status_message %}
+    {% if form.errors %}
+        <div class='alert alert-warning' role="alert">Будь-ласка, виправте наступні помилки:</div>
+    {% endif %}
+{% endblock %}
+
+{% block content %}
+
+
+    <div style="display: block;">
+        <br/>
+        <br/>
+        <br/>
+        <br/>
+
+    <!--     <form action="{% url "students_edit" object.id %}" method="post" enctype="multipart/formdata">
+            {% csrf_token %}
+            {{ form.as_p }}
+
+            <input type="submit" value="Зберегти" name="add_button" class="btn btn-primary" />
+            <button type="submit" name="cancel_button" value="Скасувати" class="btn btn-linc">Скасувати</button>
+            </form> -->
+
+        {% crispy form %}
+
+    </div>
+           
+
+
+{% endblock content %}
+
+{% block footer %}
+    <div class="row" id="footer">
+        <div class="col-xs-12">
+            <p>&copy; 2016 Сервіс Обліку Студентів. Редагування груп.</p>
+        </div>
+    </div>
+{% endblock footer %}
