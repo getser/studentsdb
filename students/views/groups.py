@@ -9,8 +9,14 @@ from ..models.students import Student
 
 from django.core.urlresolvers import reverse
 
-from django.views.generic import DeleteView
+from django.views.generic import UpdateView, DeleteView
 from django.db.models.deletion import ProtectedError
+
+from crispy_forms.helper import FormHelper
+from crispy_forms.layout import Submit
+from crispy_forms.bootstrap import FormActions
+
+from django.forms import ModelForm
 
 
 
@@ -93,8 +99,64 @@ def groups_add(request):
     # return HttpResponse('<h1>Group add form</h1>')
 
 
-def groups_edit(request, gid):
-    return HttpResponse('<h1>Group %s edit form</h1>' %gid)
+# def groups_edit(request, gid):
+#     return HttpResponse('<h1>Group %s edit form</h1>' %gid)
+
+
+class GroupUpdateForm(ModelForm):
+    """Crispy forms class for student editing class view styling"""
+
+    class Meta:
+        model = Group
+        fields = '__all__'
+        # fields = ('first_name', 'last_name', 'middle_name', 'birthday', 'photo', 'ticket', 'student_group', 'notes')
+        # exclude = ()
+
+    def __init__(self, *args, **kwargs):
+        
+        super(GroupUpdateForm, self).__init__(*args, **kwargs)
+
+
+        self.helper = FormHelper(self)
+
+        # set form tag attrbutes
+        self.helper.form_action = reverse('groups_edit',
+            kwargs={'pk':kwargs['instance'].id})
+        self.helper.form_method = 'POST'
+        self.helper.form_class = 'form-horizontal'
+
+        # set form field properties
+        self.helper.help_text_inline = True
+        self.helper.html5_reqired = True
+        self.helper.label_class = 'col-sm-2 control-label'
+        self.helper.field_class = 'col-sm-10'
+
+        # add buttons
+        # self.helper.layout[-1] = (FormActions( # - replaces last field in form with buttons
+        self.helper.layout.append(FormActions(   # adds buttons after last field 
+            Submit('add_button', u'Зберегти', css_class="btn btn-primary"),
+            Submit('cancel_button', u'Скасувати', css_class="btn btn-link"),
+            ))
+
+
+class GroupUpdateView(UpdateView):
+    """View class for editing groups"""
+
+    model = Group
+    # fields = '__all__'
+
+    template_name = 'students/groups_edit.html'
+    form_class = GroupUpdateForm
+
+    def get_success_url(self):
+        return u'%s?status_message=Групу успішно збережено!' % reverse('groups')
+
+
+    def post(self, request, *args, **kwargs):
+        if request.POST.get('cancel_button'):
+            return HttpResponseRedirect(u'%s?status_message=Редагування групи відмінено!' % reverse('groups'))
+        else:
+            return super(GroupUpdateView, self).post(request, *args, **kwargs)
 
 
 # def groups_delete(request, gid):
@@ -107,7 +169,7 @@ class GroupDeleteView(DeleteView):
     template_name = 'students/groups_confirm_delete.html' # reassigning template name !!!
 
     def get_success_url(self):
-        return u'%s?status_message=Gruop was succesfully deleted!' % reverse('groups')
+        return u'%s?status_message=Група була успішно видалена!' % reverse('groups')
 
     def delete(self, request, *args, **kwargs):
         """
@@ -121,7 +183,7 @@ class GroupDeleteView(DeleteView):
         try:
             self.object.delete()
         except ProtectedError:
-            return HttpResponseRedirect(u'%s?status_message=Group %s deletion is impossible! It contains students. Please take away all students from this group.' % (reverse('groups'), str(kwargs['pk'])))
+            return HttpResponseRedirect(u'%s?status_message=Ви не можете видалити групу %s! У ній є студенти. Будьласка, переведіть усих студентів із групи перед її видаленням!' % (reverse('groups'), str(kwargs['pk'])))
 
         return HttpResponseRedirect(success_url)
 
