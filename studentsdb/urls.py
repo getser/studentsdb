@@ -68,8 +68,9 @@ urlpatterns = [
 
 
     url(r'^admin/', admin.site.urls),
-    url(r'^contact-admin/$', contact_admin.contact_admin, name='contact_admin'),
-    url(r'^contact/', include('contact_form.urls')),
+    # url(r'^contact-admin/$', contact_admin.contact_admin, name='contact_admin'),
+    url(r'^contact-admin/$', contact_admin.ContactView.as_view(), name='contact_admin'),
+    # url(r'^contact/', include('contact_form.urls')),
     # url(r'^contact/$', include('contact_form.urls'), name='contact'),
 
 

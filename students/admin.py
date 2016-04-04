@@ -43,24 +43,35 @@ class StudentAdmin(admin.ModelAdmin):
         return reverse('students_edit', kwargs={'pk':obj.id})
 
 
+class GroupFormAdmin(ModelForm):
+    """docstring for GroupFormAdmin"""
+    pass
+
+
 class GroupAdmin(admin.ModelAdmin):
     
     list_display = ['title', 'leader', 'notes']
     list_display_links = ['title']
     list_editable = ['leader']
     ordering = ['title']
-    list_filter = ['leader']
+    # list_filter = ['leader']
     list_per_page = 7
     search_fields = ['title', 'leader']
 
+    form = GroupFormAdmin
+
+    def view_on_site(self, obj):
+        return reverse('groups_edit', kwargs={'pk':obj.id})
+
     # def view_on_site(self, obj):    
-        # return reverse('')
+    #     return reverse('')
 
 
 # Register your models here.
 
 admin.site.register(Student, StudentAdmin)
 admin.site.register(Group, GroupAdmin)
+# admin.site.register(Group)
 
 admin.site.register(Exam)
 admin.site.register(Teacher)

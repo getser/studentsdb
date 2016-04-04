@@ -104,13 +104,11 @@ def groups_add(request):
 
 
 class GroupUpdateForm(ModelForm):
-    """Crispy forms class for student editing class view styling"""
+    """Crispy forms class for groups editing class view styling"""
 
     class Meta:
         model = Group
         fields = '__all__'
-        # fields = ('first_name', 'last_name', 'middle_name', 'birthday', 'photo', 'ticket', 'student_group', 'notes')
-        # exclude = ()
 
     def __init__(self, *args, **kwargs):
         
