@@ -21,15 +21,15 @@
     <br/>
     <form action="{% url "groups_add" %}" method="POST" enctype="multipart/form-data" class="form-horizontal">{% csrf_token %}
         <div class="form-group {% if errors.title %}has-error{% endif %}">
-            <label for="title" class="control-label col-sm-2">Нзва*</label>
-                <div class="col-sm-10">
+            <label for="title" class="control-label col-sm-4 col-md-3 col-lg-2">Нзва*</label>
+                <div class="col-sm-8 col-md-6 col-lg-4">
                     <input type="text" value="{{ request.POST.title }}" name="title" id="title" class="form-control" placeholder="напр. MtM-111"></input>
                     <span class="help-block">{{ errors.title }}</span>
                 </div>
         </div>
         <div class="form-group {% if errors.leader %}has-error{% endif %}">
-            <label for="leader" class="control-label col-sm-2">Староста</label>
-                <div class="col-sm-10">
+            <label for="leader" class="control-label col-sm-4 col-md-3 col-lg-2">Староста</label>
+                <div class="col-sm-8 col-md-6 col-lg-4">
                     <select name="leader" id="leader" class="form-control">
                     <option value="">Виберіть студента</option>
                     {% for student in students %}
@@ -40,16 +40,16 @@
                 </div>
         </div>
         <div class="form-group {% if errors.notes %}has-error{% endif %}">
-            <label for="notes" class="control-label col-sm-2">Додаткові нотатки</label>
-                <div class="col-sm-10">
+            <label for="notes" class="control-label col-sm-4 col-md-3 col-lg-2">Додаткові нотатки</label>
+                <div class="col-sm-8 col-md-6 col-lg-4">
                     <textarea type="text" name="notes" id="notes" class="form-control" cols="30" rows="1">{{ request.POST.notes }}</textarea>
                     <span class="help-block">{{ errors.notes }}</span>
                 </div>
         </div>
 
         <div class="form-group">
-            <label class="control-label col-sm-2"></label>
-                <div class="col-sm-10">
+            <label class="control-label col-sm-4 col-md-3 col-lg-2"></label>
+                <div class="col-sm-8 col-md-6 col-lg-4">
                     <input type="submit" value="Додати" name="add_button" class="btn btn-primary"></input>
                     <button type="submit" name="cancel_button" class="btn btn-link">Скасувати</button>
                 </div>
