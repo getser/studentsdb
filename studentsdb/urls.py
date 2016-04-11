@@ -28,6 +28,7 @@ from django.conf.urls.static import static
 from django.conf.urls import patterns, url
 from students.views.students import StudentList, StudentUpdateView, StudentDeleteView
 from students.views.groups import GroupUpdateView, GroupDeleteView
+from students.views.journal import JournalView
 
 
 
@@ -63,8 +64,9 @@ urlpatterns = [
 
 
     # journal urls
-    url(r'^journal/$', journal.journal, name='journal'),
-    url(r'^journal/(?P<jid>\d+)/$', journal.journal_id, name='journal_id'),
+    # url(r'^journal/$', journal.journal, name='journal'),
+    # url(r'^journal/(?P<jid>\d+)/$', journal.journal_id, name='journal_id'),
+    url(r'^journal/$', JournalView.as_view(), name='journal'),
 
 
     url(r'^admin/', admin.site.urls),
