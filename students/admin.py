@@ -8,6 +8,7 @@ from .models.groups import Group
 from .models.exams import Exam
 from .models.teachers import Teacher
 from .models.subjects import Subject
+from .models.monthjournal import MonthJournal
 
 from django.core.urlresolvers import reverse
 from django.forms import ModelForm, ValidationError
@@ -71,7 +72,7 @@ class GroupAdmin(admin.ModelAdmin):
 
 admin.site.register(Student, StudentAdmin)
 admin.site.register(Group, GroupAdmin)
-# admin.site.register(Group)
+admin.site.register(MonthJournal)
 
 admin.site.register(Exam)
 admin.site.register(Teacher)
