@@ -23,8 +23,8 @@ from ..util import paginate
 #     return render(request, 'students/journal.html', {})
 
 
-# def journal_id(request, jid):
-#     return HttpResponse('<h1>Journal for student %s</h1>' %jid)
+def journal_id(request, jid):
+    return HttpResponse('<h1>Journal for student %s</h1>' %jid)
 
 
 class JournalView(TemplateView):
@@ -103,7 +103,7 @@ class JournalView(TemplateView):
             for day in range(1, number_of_days+1):
                 days.append({
                     'day': day,
-                    'present': jornal and getattr(journal, 'present_day%d' % day, False) or False,
+                    'present': journal and getattr(journal, 'present_day%d' % day, False) or False,
                     'date': date(myear, mmonth, day).strftime('%Y-%m-%d'),
                     })
 
