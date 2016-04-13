@@ -40,12 +40,12 @@ class JournalView(TemplateView):
             month = datetime.strptime(self.request.GET['month'], '%Y-%m-%d').date()
         # if not - calculating current;
         else:
-            today = date.today()
+            today = datetime.today()
             month = date(today.year, today.month, 1)
 
         # calculating current, next month and previous month
-        next_month = month + relativedelta(month=1)
-        prev_month = month - relativedelta(month=1)
+        next_month = month + relativedelta(months=1)
+        prev_month = month - relativedelta(months=1)
 
         # for now they are static
         # context['prev_month'] = '2016-03-01'
@@ -54,8 +54,8 @@ class JournalView(TemplateView):
         # context['cur_month'] = '2016-04-01'
         # context['month_verbose'] = u'April'
 
-        context['prev_month'] = next_month.strftime('%Y-%m-%d')
-        context['next_month'] = prev_month.strftime('%Y-%m-%d')
+        context['next_month'] = next_month.strftime('%Y-%m-%d')
+        context['prev_month'] = prev_month.strftime('%Y-%m-%d')
         context['year'] = month.year
         context['month_verbose'] = month.strftime('%B')
 
@@ -93,8 +93,7 @@ class JournalView(TemplateView):
             # try ot get journaal object by selected
             # month and current student
             try:
-                journal = MonthJournal.objects.get(student=student,
-                    date=month)
+                journal = MonthJournal.objects.get(student=student, date=month)
             except Exception:
                 journal = None
 
@@ -109,14 +108,14 @@ class JournalView(TemplateView):
 
             # prepare metadata for current student
             students.append({
-                'full_name': u'%s %s' % (student.last_name, student.first_name),
+                'fullname': u'%s %s' % (student.last_name, student.first_name),
                 'days': days,
                 'id': student.id,
                 'update_url': update_url,
                 })
 
-            # applying pagination to students list
-            context = paginate(students, 10, self.request, context, var_name='students')
+        # applying pagination to students list
+        context = paginate(students, 10, self.request, context, var_name='students')
 
-            # return filled data dictionary
-            return context            
+        # return filled data dictionary
+        return context            

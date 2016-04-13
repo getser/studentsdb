@@ -42,8 +42,9 @@
      title="Наступий Місяць">&rarr;</a>
 </p>
 
-<table class='table table-hover table-bordered table-striped'
-       id=' students-journal'>
+<table class="table table-hover table-bordered table-striped"
+       id="students-journal">
+
   <thead>
     <tr class="header">
         <th class="num">#</th>
@@ -51,8 +52,8 @@
         {% for day in month_header %}
         <th class="day-header">
           <!-- TODO: translate day name -->
-          {{ day_verbose }}
-          <tr/>
+          {{ day.verbose }}
+          <br />
           {{ day.day}}
         </th>
         {% endfor %}
@@ -66,16 +67,16 @@
     <tr>
       <td>
         {% if is_paginated %}
-          {{ page_bj.start_index|add:forloop.counter|add:"-1" }}
+          {{ page_obj.start_index|add:forloop.counter|add:"-1" }}
         {% else %}
           {{ forloop.counter }}
         {% endif %}  
       </td>
 
       <td>
-        <a title='Редагувати' target="blank" 
+        <a title='Редагувати' target="_blank"
            href="{% url "students_edit" student.id %}">
-          {{ student.name }}
+          {{ student.fullname }}
         </a>
       </td>
 
@@ -93,6 +94,11 @@
 </table>
 
 {% endif %}
+
+{% with object_list=students %}
+  {% include "students/pagination.html" %}
+{% endwith %}
+
 
 {% endblock content %}
 
