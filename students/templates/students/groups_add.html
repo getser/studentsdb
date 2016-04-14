@@ -1,9 +1,11 @@
 {% extends 'students/base.html' %}
 {% load static from staticfiles %}
 
-{% block meta_title %}Додавання груп{% endblock meta_title %}
+{% load crispy_forms_tags %}
 
-{% block title %}Додавання груп{% endblock title %}
+{% block meta_title %}Додати групу{% endblock meta_title %}
+
+{% block title %}Додати групу{% endblock title %}
 
 {% block logo %}<h1>Сервіс Обліку Студентів</h1>{% endblock logo %}
 
@@ -19,7 +21,7 @@
     <br/>
     <br/>
     <br/>
-    <form action="{% url "groups_add" %}" method="POST" enctype="multipart/form-data" class="form-horizontal">{% csrf_token %}
+<!--     <form action="{% url "groups_add" %}" method="POST" enctype="multipart/form-data" class="form-horizontal">{% csrf_token %}
         <div class="form-group {% if errors.title %}has-error{% endif %}">
             <label for="title" class="control-label col-sm-4 col-md-3 col-lg-2">Нзва*</label>
                 <div class="col-sm-8 col-md-6 col-lg-4">
@@ -55,8 +57,11 @@
                 </div>
             <br/>
         </div>
-    </form>
+    </form> -->
+    {% crispy form %}
+
     </div>
+
 {% endblock content %}
 
 {% block footer %}

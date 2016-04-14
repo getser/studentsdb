@@ -9,7 +9,7 @@ from ..models.students import Student
 
 from django.core.urlresolvers import reverse
 
-from django.views.generic import UpdateView, DeleteView
+from django.views.generic import CreateView, UpdateView, DeleteView
 from django.db.models.deletion import ProtectedError
 
 from crispy_forms.helper import FormHelper
@@ -63,39 +63,39 @@ def groups_list(request):
     return render(request, 'students/groups_list.html', {'groups':groups})
 
 
-def groups_add(request):
-    if request.method == 'POST':
-        if request.POST.get('add_button') is not None:
-            errors = {}
-            data = {'notes':request.POST.get('notes'),}
+# def groups_add(request):
+#     if request.method == 'POST':
+#         if request.POST.get('add_button') is not None:
+#             errors = {}                                                                                                                                                                                                                                                                                      
+#             data = {'notes':request.POST.get('notes'),}
 
-            title = request.POST.get('title')
-            if not title:
-                errors['title'] = u"Назва групи обов'язкова!"
-            else:
-                data['title'] = title
+#             title = request.POST.get('title')
+#             if not title:
+#                 errors['title'] = u"Назва групи обов'язкова!"
+#             else:
+#                 data['title'] = title
 
-            leader = request.POST.get('leader')
-            if leader:
-                students = Student.objects.filter(pk=leader)
-                if len(students) != 1:
-                    errors['leader'] = u'Виберіть правильного студента.'
-                else:
-                    data['leader'] = students[0]
-            if not errors:
-                group = Group(**data)
-                group.save()
-                return HttpResponseRedirect(u'%s?status_message=Група %s успішно додана.' % (reverse('groups'), title))
-            else:
-                return render(request, 'students/groups_add.html',
-                    {'students': Student.objects.all().order_by('last_name'),
-                    'errors': errors})
+#             leader = request.POST.get('leader')
+#             if leader:
+#                 students = Student.objects.filter(pk=leader)
+#                 if len(students) != 1:
+#                     errors['leader'] = u'Виберіть правильного студента.'
+#                 else:
+#                     data['leader'] = students[0]
+#             if not errors:
+#                 group = Group(**data)
+#                 group.save()
+#                 return HttpResponseRedirect(u'%s?status_message=Група %s успішно додана.' % (reverse('groups'), title))
+#             else:
+#                 return render(request, 'students/groups_add.html',
+#                     {'students': Student.objects.all().order_by('last_name'),
+#                     'errors': errors})
 
-        elif request.POST.get('cancel_button') is not None:
-            return HttpResponseRedirect(u'%s?status_message=Додавання групи скасовано!' % reverse('groups'))
-    else:
-        return render(request, 'students/groups_add.html',
-            {'students': Student.objects.all().order_by('last_name')})
+#         elif request.POST.get('cancel_button') is not None:
+#             return HttpResponseRedirect(u'%s?status_message=Додавання групи скасовано!' % reverse('groups'))
+#     else:
+#         return render(request, 'students/groups_add.html',
+#             {'students': Student.objects.all().order_by('last_name')})
     # return HttpResponse('<h1>Group add form</h1>')
 
 
@@ -118,8 +118,13 @@ class GroupUpdateForm(ModelForm):
         self.helper = FormHelper(self)
 
         # set form tag attrbutes
-        self.helper.form_action = reverse('groups_edit',
-            kwargs={'pk':kwargs['instance'].id})
+        instance = kwargs.get('instance')
+        if instance:
+            self.helper.form_action = reverse('groups_edit',
+                kwargs={'pk':instance.id})
+        else:
+            self.helper.form_action = reverse('groups_add')
+
         self.helper.form_method = 'POST'
         self.helper.form_class = 'form-horizontal'
 
@@ -129,12 +134,30 @@ class GroupUpdateForm(ModelForm):
         self.helper.label_class = 'col-sm-2 control-label'
         self.helper.field_class = 'col-sm-10'
 
-        # add buttons
-        # self.helper.layout[-1] = (FormActions( # - replaces last field in form with buttons
         self.helper.layout.append(FormActions(   # adds buttons after last field 
             Submit('add_button', u'Зберегти', css_class="btn btn-primary"),
             Submit('cancel_button', u'Скасувати', css_class="btn btn-link"),
             ))
+
+
+class GroupAddView(CreateView):
+    """View class for editing groups"""
+
+    model = Group
+    # fields = '__all__'
+
+    template_name = 'students/groups_add.html'
+    form_class = GroupUpdateForm
+
+    def get_success_url(self):
+        return u'%s?status_message=Групу успішно додано!' % reverse('groups')
+
+
+    def post(self, request, *args, **kwargs):
+        if request.POST.get('cancel_button'):
+            return HttpResponseRedirect(u'%s?status_message=Додавання групи відмінено!' % reverse('groups'))
+        else:
+            return super(GroupAddView, self).post(request, *args, **kwargs)
 
 
 class GroupUpdateView(UpdateView):
@@ -187,7 +210,7 @@ class GroupDeleteView(DeleteView):
 
     def post(self, request, *args, **kwargs):
         if request.POST.get('cancel_button'):
-            return HttpResponseRedirect(u'%s?status_message=**да**ння групи скасовано!' % reverse('groups'))
+            return HttpResponseRedirect(u'%s?status_message=Видалення групи скасовано!' % reverse('groups'))
         # elif request.POST.get('delete_button'):
         #     return self.get_success_url()
         else:
