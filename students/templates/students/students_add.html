@@ -1,22 +1,14 @@
 {% extends 'students/base.html' %}
 {% load static from staticfiles %}
 
+{% load crispy_forms_tags %}
+
 {% block meta_title %}Додавання Студента{% endblock meta_title %}
 
-{% block title %}Додавання Студента{% endblock title %}
+{% block title %}Додати Студента{% endblock title %}
 
 {% block logo %}<h1>Сервіс Обліку Студентів</h1>{% endblock logo %}
                
-{% block groups_selector %}
-    <div class="col-xs-4" id='group-selector'>
-        <strong>Група:</strong>
-        <select>
-            <option value=''>Усі студенти</option>
-            <option value=''>МтМ - 21, Іванов Іван (№ 7657)</option>
-            <option value=''>МтМ - 22, Гетьманчук Сергій (№ 2123)</option>
-        </select>
-    </div>
-{% endblock groups_selector %}
 
 {% block status_message %}
     {% if errors %}
@@ -30,7 +22,7 @@
     <br/>
     <br/>
     <br/>
-    <form action="{% url "students_add" %}" method="POST" enctype="multipart/form-data" class="form-horizontal">
+    <!-- <form action="{% url "students_add" %}" method="POST" enctype="multipart/form-data" class="form-horizontal">
         {% csrf_token %}
         <div class="form-group {% if errors.first_name %}has-error{% endif %}">
             <label for="first_name" class="control-label col-sm-4 col-md-3 col-lg-2">Ім'я*</label>
@@ -102,7 +94,9 @@
                 </div>
             <br/>
         </div>
-    </form>
+    </form> -->
+
+    {% crispy form %}
     </div>
 {% endblock content %}
 
