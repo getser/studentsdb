@@ -181,12 +181,14 @@ class GroupDeleteView(DeleteView):
         try:
             self.object.delete()
         except ProtectedError:
-            return HttpResponseRedirect(u'%s?status_message=Ви не можете видалити групу %s! У ній є студенти. Будьласка, переведіть усих студентів із групи перед її видаленням!' % (reverse('groups'), str(kwargs['pk'])))
+            return HttpResponseRedirect(u'%s?status_message=Ви не можете видалити групу %s! У ній є студенти. Будь-ласка, переведіть усих студентів із групи перед її видаленням!' % (reverse('groups'), str(kwargs['pk'])))
 
         return HttpResponseRedirect(success_url)
 
-    # def post(self, request, *args, **kwargs):
-    #     if request.POST.get('cancel_button'):
-    #         return HttpResponseRedirect(u'%s?status_message=**да**ння групи скасовано!' % reverse('groups'))
-    #     elif request.POST.get('delete_button'):
-    #         return self.get_success_url()
+    def post(self, request, *args, **kwargs):
+        if request.POST.get('cancel_button'):
+            return HttpResponseRedirect(u'%s?status_message=**да**ння групи скасовано!' % reverse('groups'))
+        # elif request.POST.get('delete_button'):
+        #     return self.get_success_url()
+        else:
+            return super(GroupDeleteView, self).post(request, *args, **kwargs)

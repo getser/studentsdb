@@ -9,26 +9,20 @@
 
 {% block content %}
 
-
     <div style="display: block;">
         <br/><br/><br/><br/>
 
         <form action="{% url "students_delete" object.id %}" method="post" >
             {% csrf_token %}
             <p>Ви дійсно хочете видалити студента "{{ object }}"?</p>
-
-            <input type="submit" value="Так" name="delete_button" class="btn btn-danger" />
-<!--             <button type="submit" name="cancel_button" value="Скасувати" class="btn btn-link">Скасувати</button>
-            <br/><br/> -->
+            <br/>
+            <input type="submit" value="&nbsp;&nbsp;Так&nbsp;&nbsp;" name="delete_button" class="btn btn-danger" />
+            <button type="submit" name="cancel_button" value="Скасувати" class="btn btn-link">Скасувати</button>
             </form>
             <br/>
-            <a href={% url 'home' %}?status_message="Відмінено!" class="btn btn-success" >No&nbsp;</a>
-            <br/><br/>
-
+            <br/>
     </div>
            
-
-
 {% endblock content %}
 
 {% block footer %}
