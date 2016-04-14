@@ -23,9 +23,8 @@ class MonthJournal(models.Model):
         verbose_name=u'Дата',
         blank=False)
 
-    # list of  days, each says whether stdent was present or not
+    # list of days, each says whether student was present or not
     
-    # present_days = []
     present_day1 = models.BooleanField(default=False)
     present_day2 = models.BooleanField(default=False)
     present_day3 = models.BooleanField(default=False)
@@ -56,11 +55,11 @@ class MonthJournal(models.Model):
     present_day28 = models.BooleanField(default=False)
     present_day29 = models.BooleanField(default=False)
     present_day30 = models.BooleanField(default=False)
-    present_day30 = models.BooleanField(default=False)
+    present_day31 = models.BooleanField(default=False)
 
 
     def __unicode__(self):
         return u'%s: %d, %d' % (self.student.last_name, self.date.month, self.date.year)
 
-# for i in xrange(31):
-#     MonthJurnal.present_days.append(models.BooleanField(default=False))
+# for i in xrange(1, 32):
+#     setattr(MonthJournal, 'present_day%d' % i, models.BooleanField(default=False))
