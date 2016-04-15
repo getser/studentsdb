@@ -59,7 +59,10 @@ class MonthJournal(models.Model):
 
 
     def __unicode__(self):
+        # presence = '\n'.join(getattr(self, 'present_day%i' % i) for i in range(1,32))
         return u'%s: %d, %d' % (self.student.last_name, self.date.month, self.date.year)
 
-# for i in xrange(1, 32):
+
+# doesn't work:
+# for i in range(1, 32):
 #     setattr(MonthJournal, 'present_day%d' % i, models.BooleanField(default=False))
