@@ -23,8 +23,8 @@ from ..util import paginate
 #     return render(request, 'students/journal.html', {})
 
 
-def journal_id(request, jid):
-    return HttpResponse('<h1>Journal for student %s</h1>' %jid)
+# def journal_id(request, jid):
+#     return HttpResponse('<h1>Journal for student %s</h1>' %jid)
 
 
 class JournalView(TemplateView):
@@ -100,7 +100,12 @@ class JournalView(TemplateView):
             for d in range(1, number_of_days+1)]
 
         # gettting all students sorted by last name
-        queryset = Student.objects.order_by('last_name')
+        # or just one student if we need to display journal for one
+
+        if kwargs.get('pk'):
+            queryset = [Student.objects.get(pk=kwargs['pk'])]
+        else:
+            queryset = Student.objects.order_by('last_name')
 
         # url to update student presence, for form post
         update_url = reverse('journal')  # this adress is for AJAX request
