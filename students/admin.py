@@ -8,6 +8,7 @@ from .models.groups import Group
 from .models.exams import Exam
 from .models.teachers import Teacher
 from .models.subjects import Subject
+from .models.exam_result import ExamResult
 from .models.monthjournal import MonthJournal
 
 from django.core.urlresolvers import reverse
@@ -75,5 +76,6 @@ admin.site.register(Group, GroupAdmin)
 admin.site.register(MonthJournal)
 
 admin.site.register(Exam)
+admin.site.register(ExamResult)
 admin.site.register(Teacher)
 admin.site.register(Subject)

@@ -1,3 +1,5 @@
+# -*- coding: utf-8 -*-
+
 from __future__ import unicode_literals
 
 from django.db import models
@@ -6,30 +8,32 @@ from django.db import models
 class ExamResult(models.Model):
     """Exam Model"""
 
+    marks = ((5, 'Excellent'), (4, 'Good'), (3, 'Fair'), (2, 'NotAttested'), (1, 'NotPermitted'), (0, 'NotPresent'))
+
     class Meta(object):
         verbose_name = 'Результат іспиту'
-        verbose_name_plural = 'Рузультати іспитів'
+        verbose_name_plural = 'Результати іспитів'
 
 
-    exam = models.ManyToManyField('Exam',
-        verbose_name="Іспит",
+    exam = models.ForeignKey('Exam',
         blank=False,
         null=True,
-        on_delete=models.SET_NULL)
+        on_delete=models.SET_NULL
+        )
 
 
     student = models.ManyToManyField('Student',
-        verbose_name="Студент",
         blank=False,
-        null=True,
-        on_delete=models.SET_NULL)
+        )
 
 
-    mark =  PositiveSmallIntegerField('Mark',
+    mark = models.PositiveSmallIntegerField(
         verbose_name="Оцінка",
+        choices=marks,
         blank=False,
         null=True,
-        default=0)
+        default=0,
+        )
 
     def __str__(self):
-        return '%s на %s отримав %s' %(self.student, self.exam, self.mark)
+        return '%s at %s got %s' %(self.student, self.exam, self.mark)
