@@ -134,13 +134,36 @@ def exams_add(request):
              })
 
     # return HttpResponse('<h1>Exam add form</h1>')
-    
-
 
 
 def exams_edit(request, eid):
     return HttpResponse('<h1>Exam %s edit form</h1>' %eid)
 
 
-def exams_delete(request, eid):
-    return HttpResponse('<h1>Exam %s delete form</h1>' %eid)
+# def exams_delete(request, eid):
+#     return HttpResponse('<h1>Exam %s delete form</h1>' %eid)
+
+def exams_delete(request, pk):
+    if request.method == 'GET':
+        exam = Exam.objects.get(pk=pk)
+        if exam:
+            return render(request, 'students/exams_confirm_delete.html', {'object': exam})
+        else:
+            HttpResponseRedirect(u'%s?status_message=Виберіть коректний екзамен.' % reverse('exams'))
+    elif request.method == 'POST':
+        if request.POST.get('delete_button'):
+            exam = Exam.objects.get(pk=pk)
+            if exam:
+                exam.delete()
+
+                return HttpResponseRedirect(u'%s?status_message=Екзамен успішно відалено!' % reverse('exams'))
+
+            else:
+                HttpResponseRedirect(u'%s?status_message=Виберіть коректний екзамен.' % reverse('exams'))
+
+
+        else:
+            return HttpResponseRedirect(u'%s?status_message=Видалення екзамена скасовано!' % reverse('exams'))
+
+
+    # return HttpResponse('<h1>Exam %s edit form</h1>' %pk)
