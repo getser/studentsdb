@@ -47,7 +47,7 @@
                         <li role='presentation' {% if request.path == '/' %} class='active' {% endif %}><a href={% url 'home' %}?order_by=last_name>Студенти</a></li>
                         <li role='presentation' {% url 'journal' as journal_url %}{% if journal_url in request.path %} class='active' {% endif %}><a href={% url 'journal' %}>Відвідування</a></li>
                         <li role='presentation' {% url 'groups' as group_url %} {% if request.path == group_url %} class='active' {% endif %}><a href={% url 'groups' %}?order_by=title>Групи</a></li>
-                        <li role='presentation' {% url 'exams' as exams_url %} {% if exams_url in request.path %} class='active' {% endif %}><a href={% url 'exams' %}?order_by=student_group>Іспити</a></li>
+                        <li role='presentation' {% url 'exams' as exams_url %} {% if request.path == exams_url %} class='active' {% endif %}><a href={% url 'exams' %}?order_by=student_group>Іспити</a></li>
                         <li role='presentation' {% if '/contact-admin' in request.path %} class='active' {% endif %}><a href="{% url 'contact_admin' %}">Контакт</a></li>
                     </ul>
                 </div>

@@ -36,4 +36,4 @@ class Exam(models.Model):
         )
 
     def __str__(self):
-        return 'Exam for %s on %s in %s.  Examinator %s.' %(self.student_group, self.subject, self.date_and_time, self.teacher, )
+        return 'Exam for %s on %s at %s.  Examinator %s.' %(self.student_group, self.subject, self.date_and_time, self.teacher, )

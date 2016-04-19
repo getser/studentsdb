@@ -1,10 +1,18 @@
 # -*- coding: utf-8 -*-
+
+from datetime import datetime
+
 from django.shortcuts import render
-from django.http import HttpResponse
+from django.http import HttpResponse, HttpResponseRedirect
+from django.core.urlresolvers import reverse
 from django.template import RequestContext, loader
 from django.core.paginator import Paginator, EmptyPage, PageNotAnInteger
 
 from ..models.exams import Exam
+from ..models.subjects import Subject
+from ..models.teachers import Teacher
+from ..models.groups import Group
+from ..models.students import Student
 
 
 # Views for exams
@@ -54,7 +62,80 @@ def exams_list(request):
 
 
 def exams_add(request):
-    return HttpResponse('<h1>Exam add form</h1>')
+    if request.method == 'POST':
+        if request.POST.get('add_button'):
+            data = {}
+            errors = {}
+
+            subject_id = request.POST.get('subject')
+            if subject_id:
+                subject = Subject.objects.filter(pk=subject_id)
+                if len(subject) != 1:
+                    errors['subject'] = "Choose correct subject!"
+                else:
+                    data['subject'] = subject[0]
+            else:
+                errors['subject'] = "Це поле обов'язкове."
+
+            teacher_id = request.POST.get('teacher')
+            if teacher_id:
+                teacher = Teacher.objects.filter(pk=teacher_id)
+                if len(teacher) != 1:
+                    errors['teacher'] = "Choose correct teacher!"
+                else:
+                    data['teacher'] = teacher[0]
+            else:
+                errors['teacher'] = "Це поле обов'язкове."
+
+            date_time = request.POST.get('date_and_time')
+            if date_time:
+                try:
+                    datetime.strptime(date_time, '%Y-%m-%d %H:%M')
+                except ValueError:
+                    errors['date_and_time'] = "Enter correct date and time."
+                else:
+                    data['date_and_time'] = date_time
+
+            else:
+                errors['date_and_time'] = "Це поле обов'язкове."
+
+            group_id = request.POST.get('student_group')
+            if group_id:
+                group = Group.objects.filter(pk=group_id)
+                if len(group) != 1:
+                    errors['student_group'] = "Choose correct group!"
+                else:
+                    data['student_group'] = group[0]
+            else:
+                errors['student_group'] = "Це поле обов'язкове."
+
+
+            if errors:
+                return render(request, 'students/exams_add.html',{
+                    'errors': errors,
+                    'data': data,
+                    'teachers': Teacher.objects.all().order_by('last_name'),
+                    'subjects': Subject.objects.all().order_by('title'),
+                    'groups': Group.objects.all().order_by('title')
+                    })
+            else:
+
+                exam = Exam(**data)
+                exam.save()
+
+                return HttpResponseRedirect(u'%s?status_message=Exam is successfuly added!' % reverse('exams'))
+        else:
+            return HttpResponseRedirect(u'%s?status_message=Додавання екзамена скасовано!' % reverse('exams'))
+    else:
+        return render(request, 'students/exams_add.html', {
+            'teachers': Teacher.objects.all().order_by('last_name'),
+            'subjects': Subject.objects.all().order_by('title'),
+            'groups': Group.objects.all().order_by('title')
+             })
+
+    # return HttpResponse('<h1>Exam add form</h1>')
+    
+
 
 
 def exams_edit(request, eid):
