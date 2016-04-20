@@ -1,0 +1,111 @@
+{% extends 'students/base.html' %}
+{% load static from staticfiles %}
+
+{% load crispy_forms_tags %}
+
+{% block meta_title %}Редагування екзамену{% endblock meta_title %}
+
+{% block title %}Редагувати екзамен{% endblock title %}
+
+{% block logo %}<h1>Сервіс Обліку Студентів</h1>{% endblock logo %}
+               
+
+{% block status_message %}
+    {% if errors %}
+        <div class='alert alert-warning' role="alert">Будь-ласка, виправте наступні помилки:</div>
+    {% endif %}
+{% endblock %}
+
+{% block content %}
+    <div style="display: block;">
+    <br/>
+    <br/>
+    <br/>
+    <br/>
+
+    <form action=
+
+      {% if object.id %}
+        "{% url "exams_edit" object.id %}"
+      {% else %}
+        "{% url "exams_edit" data.id %}"
+      {% endif %}
+
+      method="POST" enctype="multipart/form-data" class="form-horizontal">
+        {% csrf_token %}
+
+
+        <div class="form-group {% if errors.subject %}has-error{% endif %}">
+            <label for="subject" class="control-label col-sm-4 col-md-3 col-lg-2">Предмет*</label>
+                <div class="col-sm-8 col-md-6 col-lg-4">
+                    <select name="subject" id="subject" class="form-control">
+                    <!-- <option value="">Оберіть предмет</option> -->
+                    {% for subject in subjects %}
+                    <option value="{{ subject.id }}" {% if subject.id == request.POST.subject|add:0 or subject.id == object.subject.id|add:0 %} selected="1"{% endif %}>{{ subject.title }}</option>
+                    {% endfor %}
+                    </select>
+                    <span class="help-block">{{ errors.subject }}</span>
+                </div>
+        </div>
+
+        <div class="form-group {% if errors.teacher %}has-error{% endif %}">
+            <label for="teacher" class="control-label col-sm-4 col-md-3 col-lg-2">Викладач*</label>
+                <div class="col-sm-8 col-md-6 col-lg-4">
+                    <select name="teacher" id="teacher" class="form-control">
+                    <!-- <option value="">Оберіть викладача</option> -->
+                    {% for teacher in teachers %}
+                    <option value="{{ teacher.id }}" {% if teacher.id == request.POST.teacher|add:0 or teacher.id == object.teacher.id|add:0 %} selected="1"{% endif %}>{{ teacher.first_name }} {{ teacher.last_name }}</option>
+                    {% endfor %}
+                    </select>
+                    <span class="help-block">{{ errors.teacher }}</span>
+                </div>
+        </div>
+
+        <div class="form-group {% if errors.date_and_time %}has-error{% endif %}">
+            <label for="date_and_time" class="control-label col-sm-4 col-md-3 col-lg-2">Дата та час*</label>
+                <div class="col-sm-8 col-md-6 col-lg-4">
+                    <input type="date_and_time" value="{{ request.POST.date_and_time }}{{ date_time }}" name="date_and_time" id="date_and_time" class="form-control" placeholder="напр. 1970-10-25 10:25"></input>
+                    <span class="help-block">{{ errors.date_and_time }}</span>
+                </div>
+        </div>
+
+        <div class="form-group {% if errors.student_group %}has-error{% endif %}">
+            <label for="student_group" class="control-label col-sm-4 col-md-3 col-lg-2">Група*</label>
+                <div class="col-sm-8 col-md-6 col-lg-4">
+                    <select name="student_group" id="student_group" class="form-control">
+                    <!-- <option value="">Оберіть групу</option> -->
+                    {% for group in groups %}
+                    <option value="{{ group.id }}" {% if group.id == request.POST.student_group|add:0 or group.id == object.student_group.id|add:0  %} selected="1"{% endif %}>{{ group.title }}</option>
+                    {% endfor %}
+                    </select>
+                    <span class="help-block">{{ errors.student_group }}</span>
+                </div>
+        </div>
+<!--         <div class="form-group {% if errors.notes %}has-error{% endif %}">
+            <label for="notes" class="control-label col-sm-4 col-md-3 col-lg-2">Додаткові нотатки</label>
+                <div class="col-sm-8 col-md-6 col-lg-4">
+                    <textarea type="text" name="notes" id="notes" class="form-control" cols="30" rows="1">{{ request.POST.notes }}</textarea>
+                    <span class="help-block">{{ errors.notes }}</span>
+                </div>
+        </div> -->
+
+        <div class="form-group">
+            <label class="control-label col-sm-4 col-md-3 col-lg-2"></label>
+                <div class="col-sm-8 col-md-6 col-lg-4">
+                    <input type="submit" value="Зберегти" name="edit_button" class="btn btn-primary"></input>
+                    <button type="submit" name="cancel_button" class="btn btn-link">Скасувати</button>
+                </div>
+            <br/>
+        </div>
+    </form>
+
+    </div>
+{% endblock content %}
+
+{% block footer %}
+    <div class="row" id="footer">
+        <div class="col-xs-12">
+            <p>&copy; 2016 Сервіс Обліку Студентів. Редагування екзамену.</p>
+        </div>
+    </div>
+{% endblock footer %}

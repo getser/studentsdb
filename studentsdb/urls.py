@@ -61,7 +61,8 @@ urlpatterns = [
     # exams urls
     url(r'^exams/$', exams.exams_list, name='exams'),
     url(r'^exams/add/$', exams.exams_add, name='exams_add'),
-    url(r'^exams/(?P<eid>\d+)/edit/$', exams.exams_edit, name='exams_edit'),
+    # url(r'^exams/(?P<eid>\d+)/edit/$', exams.exams_edit, name='exams_edit'),
+    url(r'^exams/(?P<pk>\d+)/edit/$', exams.exams_edit, name='exams_edit'),
     # url(r'^exams/(?P<eid>\d+)/delete/$', exams.exams_delete, name='exams_delete'),
     url(r'^exams/(?P<pk>\d+)/delete/$', exams.exams_delete, name='exams_delete'),
 

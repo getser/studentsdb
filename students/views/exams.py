@@ -71,7 +71,7 @@ def exams_add(request):
             if subject_id:
                 subject = Subject.objects.filter(pk=subject_id)
                 if len(subject) != 1:
-                    errors['subject'] = "Choose correct subject!"
+                    errors['subject'] = "Виберіть правильний предмет!"
                 else:
                     data['subject'] = subject[0]
             else:
@@ -81,7 +81,7 @@ def exams_add(request):
             if teacher_id:
                 teacher = Teacher.objects.filter(pk=teacher_id)
                 if len(teacher) != 1:
-                    errors['teacher'] = "Choose correct teacher!"
+                    errors['teacher'] = "Виберіть правильного вчителя!"
                 else:
                     data['teacher'] = teacher[0]
             else:
@@ -92,7 +92,7 @@ def exams_add(request):
                 try:
                     datetime.strptime(date_time, '%Y-%m-%d %H:%M')
                 except ValueError:
-                    errors['date_and_time'] = "Enter correct date and time."
+                    errors['date_and_time'] = "Введіть коректні дату та час!"
                 else:
                     data['date_and_time'] = date_time
 
@@ -103,7 +103,7 @@ def exams_add(request):
             if group_id:
                 group = Group.objects.filter(pk=group_id)
                 if len(group) != 1:
-                    errors['student_group'] = "Choose correct group!"
+                    errors['student_group'] = "Виберіть правильну групу!"
                 else:
                     data['student_group'] = group[0]
             else:
@@ -119,11 +119,10 @@ def exams_add(request):
                     'groups': Group.objects.all().order_by('title')
                     })
             else:
-
                 exam = Exam(**data)
                 exam.save()
 
-                return HttpResponseRedirect(u'%s?status_message=Exam is successfuly added!' % reverse('exams'))
+                return HttpResponseRedirect(u'%s?status_message=Екзамен успішно додано!' % reverse('exams'))
         else:
             return HttpResponseRedirect(u'%s?status_message=Додавання екзамена скасовано!' % reverse('exams'))
     else:
@@ -136,12 +135,100 @@ def exams_add(request):
     # return HttpResponse('<h1>Exam add form</h1>')
 
 
-def exams_edit(request, eid):
-    return HttpResponse('<h1>Exam %s edit form</h1>' %eid)
+# def exams_edit(request, eid):
+#     return HttpResponse('<h1>Exam %s edit form</h1>' %eid)
+
+
+def exams_edit(request, pk):
+    if request.method == 'GET':
+        exam = Exam.objects.get(pk=pk)
+        if exam:
+            date_time = exam.date_and_time.strftime('%Y-%m-%d %H:%M')
+
+            return render(request, 'students/exams_edit.html',{
+                    'object': exam,
+                    'date_time': date_time,
+                    'teachers': Teacher.objects.all().order_by('last_name'),
+                    'subjects': Subject.objects.all().order_by('title'),
+                    'groups': Group.objects.all().order_by('title')
+                    })
+        else:
+            HttpResponseRedirect(u'%s?status_message=Виберіть коректний екзамен.' % reverse('exams'))
+    elif request.method == 'POST':
+        if request.POST.get('edit_button'):
+            data = {}
+            errors = {}
+
+            exam = Exam.objects.get(pk=pk)
+            if exam:
+                data['id'] = pk
+            else:
+                HttpResponseRedirect(u'%s?status_message=Виберіть коректний екзамен.' % reverse('exams'))
+
+            subject_id = request.POST.get('subject')
+            if subject_id:
+                subject = Subject.objects.get(pk=subject_id)
+                if not subject:
+                    errors['subject'] = "Виберіть правильний предмет!"
+                else:
+                    data['subject'] = subject
+            else:
+                errors['subject'] = "Це поле обов'язкове."
+
+            teacher_id = request.POST.get('teacher')
+            if teacher_id:
+                teacher = Teacher.objects.get(pk=teacher_id)
+                if not teacher:
+                    errors['teacher'] = "Виберіть правильного вчителя!"
+                else:
+                    data['teacher'] = teacher
+            else:
+                errors['teacher'] = "Це поле обов'язкове."
+
+            date_time = request.POST.get('date_and_time')
+            if date_time:
+                try:
+                    datetime.strptime(date_time, '%Y-%m-%d %H:%M')
+                except ValueError:
+                    errors['date_and_time'] = "Введіть коректні дату та час!"
+                else:
+                    data['date_and_time'] = date_time
+            else:
+                errors['date_and_time'] = "Це поле обов'язкове."
+
+            group_id = request.POST.get('student_group')
+            if group_id:
+                group = Group.objects.get(pk=group_id)
+                if not group:
+                    errors['student_group'] = "Виберіть правильну групу!"
+                else:
+                    data['student_group'] = group
+            else:
+                errors['student_group'] = "Це поле обов'язкове."
+
+            if errors:
+                return render(request, 'students/exams_edit.html',{
+                    'errors': errors,
+                    'data': data,
+                    'teachers': Teacher.objects.all().order_by('last_name'),
+                    'subjects': Subject.objects.all().order_by('title'),
+                    'groups': Group.objects.all().order_by('title')
+                    })
+            else:
+                exam.date_and_time = data['date_and_time']
+                exam.teacher = data['teacher']
+                exam.subject = data['subject']
+                exam.student_group = data['student_group']
+                exam.save()
+
+                return HttpResponseRedirect(u'%s?status_message=Екзамен успішно відредаговано!' % reverse('exams'))
+        else:
+            return HttpResponseRedirect(u'%s?status_message=Редагування екзамена скасовано!' % reverse('exams'))
 
 
 # def exams_delete(request, eid):
 #     return HttpResponse('<h1>Exam %s delete form</h1>' %eid)
+
 
 def exams_delete(request, pk):
     if request.method == 'GET':
@@ -155,15 +242,10 @@ def exams_delete(request, pk):
             exam = Exam.objects.get(pk=pk)
             if exam:
                 exam.delete()
-
                 return HttpResponseRedirect(u'%s?status_message=Екзамен успішно відалено!' % reverse('exams'))
-
             else:
                 HttpResponseRedirect(u'%s?status_message=Виберіть коректний екзамен.' % reverse('exams'))
-
-
         else:
             return HttpResponseRedirect(u'%s?status_message=Видалення екзамена скасовано!' % reverse('exams'))
-
 
     # return HttpResponse('<h1>Exam %s edit form</h1>' %pk)
