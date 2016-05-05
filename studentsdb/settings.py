@@ -49,12 +49,6 @@ EMAIL_USE_TLS = False
 EMAIL_USE_SSL = True
 
 
-#Application data files storage configuration (photo, .mp3, etc.)
-
-MEDIA_URL = '/media/'
-MEDIA_ROOT = os.path.join(BASE_DIR, '..', 'media')
-
-
 # Application definition
 
 INSTALLED_APPS = [
@@ -97,6 +91,7 @@ TEMPLATES = [
                 'django.contrib.auth.context_processors.auth',
                 'django.contrib.messages.context_processors.messages',
                 'studentsdb.context_processors.students_proc', # our own context processor
+                'students.context_processors.groups_processor', # our own context processor
             ],
         },
     },
@@ -160,6 +155,11 @@ USE_TZ = True
 STATIC_URL = '/static/'
 
 # PORTAL_URL = 'http://localhost:8000'
+
+#Application data files storage configuration (photo, .mp3, etc.)
+
+MEDIA_URL = '/media/'
+MEDIA_ROOT = os.path.join(BASE_DIR, '..', 'media')
 
 
 # the next is depreceted in Django 1.8. Use TEMPLATES dictionary instead !!!
